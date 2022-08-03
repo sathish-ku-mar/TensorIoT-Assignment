@@ -1,4 +1,4 @@
-import os
+import os, jwt
 from datetime import datetime, timedelta
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -52,3 +52,39 @@ class User(db.Model):
         :param email: User email id
         """
         return cls.query.filter_by(email=email).first()
+
+    def encode_auth_token(self, user_id):
+        """
+        Generates the Auth Token
+        :return: string
+        """
+        try:
+            payload = {
+                'exp': datetime.utcnow() + timedelta(days=0, seconds=59),
+                'iat': datetime.utcnow(),
+                'user_id': user_id
+            }
+            return jwt.encode(
+                payload,
+                os.environ.get("SECRET_KEY", "TensorIOT"),
+                algorithm='HS256'
+            )
+
+        except Exception as e:
+            return e
+    
+    @staticmethod
+    def decode_auth_token(auth_token):
+        """
+        Decodes the auth token
+        :param auth_token:
+        :return: integer|string
+        """
+        try:
+            payload = jwt.decode(auth_token, os.environ.get("SECRET_KEY", "TensorIOT"))
+            return payload['user_id']
+            pass
+        except jwt.ExpiredSignatureError:
+            return 'Signature expired. Please log in again.'
+        except jwt.InvalidTokenError:
+            return 'Invalid token. Please log in again.'

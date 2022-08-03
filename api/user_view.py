@@ -43,10 +43,15 @@ def login():
     if result:
         result.last_login = datetime.datetime.utcnow()
         result.save()
-        responseObject = {
-            "success": True,
-            'message': 'Successfully logged in.'
-        }
+        # Generate auth token
+        auth_token = result.encode_auth_token(result.id)
+        
+        if auth_token:
+            responseObject = {
+                "success": True,
+                'message': 'Successfully logged in.',
+                'auth_token': auth_token
+            }
         return jsonify(responseObject), 200
     else:
         return jsonify({'error':'Invalid credentials'}), 400
@@ -79,5 +84,7 @@ def register():
     except Exception as err:
         return jsonify({"error":str(err)}), 400
     
-    return {"success": True,
-            "message": "User successfully created: "+ str(name)}, 200
+    return jsonify({"success": True,
+            "message": "User successfully created: "+ str(name)}), 200
+
+
