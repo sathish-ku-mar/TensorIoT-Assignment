@@ -27,19 +27,19 @@ Check whether the server is running by going to [http://127.0.0.1:5000/user/](ht
 
 ------------
 ### 5. User login API
-URL: http://127.0.0.1:5000/user/login/
-Content-Type: application/json
-Payload: {
+`URL: http://127.0.0.1:5000/user/login/`<br />
+`Content-Type: application/json`<br />
+`Payload: {
     "email": "sathish@gmail.com",
     "password": "123456"
-}
+}`<br />
 
 ------------
 ### 6. User register API
-URL: http://127.0.0.1:5000/user/register/
-Content-Type: application/json
-Payload: {
+`URL: http://127.0.0.1:5000/user/register/`<br />
+`Content-Type: application/json`<br />
+`Payload: {
     "name": "sathish",
     "email": "sathish@gmail.com",
     "password": "123456"
-}
+}`<br />
